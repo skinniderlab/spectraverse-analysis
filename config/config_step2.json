@@ -1,0 +1,92 @@
+{
+    "script_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/spectraverse/",
+    "data_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/data/example/",
+    "pipeline": [
+        {"script": "step2-1_mgf2csv.py", "config_key": "step2-1_mgf2csv"},
+        {"script": "step2-2_cleaning.py", "config_key": "step2-2_cleaning"},
+        {"script": "step2-3_standardization.py", "config_key": "step2-3_standardization"},
+        {"script": "step2-4_removal.py", "config_key": "step2-4_removal"},
+        {"script": "step2-5_lowres-check.py", "config_key": "step2-5_lowres-check"},
+        {"script": "step2-6_prec-check.py", "config_key": "step2-6_prec-check"},
+        {"script": "step2-7_highfragmass-check.py", "config_key": "step2-7_highfragmass-check"},
+        {"script": "step2-8_csv2mgf.py", "config_key": "step2-8_csv2mgf"}
+    ],
+    "steps": {
+        "step2-1_mgf2csv": {
+            "input": [
+                "temp/test_merge_clean_temp.csv",
+                "temp/test_merge_clean_temp.mgf"
+            ],
+            "output": []
+        },
+        "step2-2_cleaning": {
+            "input": [
+                "temp/test_merge_clean_temp.csv",
+                "temp/test_merge_clean_temp.mgf"
+            ],
+            "output": [
+                "temp/test_merge_clean.csv",
+                "temp/test_merge_clean.mgf"
+            ]
+        },
+        "step2-3_standardization": {
+            "input": [
+                "temp/test_merge_clean.csv",
+                "temp/test_merge_clean.mgf"
+            ],
+            "output": [
+                "temp/test-can.csv",
+                "temp/test-can.mgf"
+            ]
+        },
+        "step2-4_removal": {
+            "input": [
+                "temp/test-can.csv",
+                "temp/test-can.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem.csv",
+                "temp/test-can-rem.mgf"
+            ]
+        },
+        "step2-5_lowres-check": {
+            "input": [
+                "temp/test-can-rem.csv",
+                "temp/test-can-rem.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres.csv",
+                "temp/test-can-rem-lowres.mgf"
+            ]
+        },
+        "step2-6_prec-check": {
+            "input": [
+                "temp/test-can-rem-lowres.csv",
+                "temp/test-can-rem-lowres.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres-prec.csv",
+                "temp/test-can-rem-lowres-prec.mgf"
+            ]
+        },
+        "step2-7_highfragmass-check": {
+            "input": [
+                "temp/test-can-rem-lowres-prec.csv",
+                "temp/test-can-rem-lowres-prec.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres-prec-highfragmass.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass.mgf"
+            ]
+        },
+        "step2-8_csv2mgf": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres-prec-highfragmass-mod.mgf"
+            ]
+        }
+    }
+}

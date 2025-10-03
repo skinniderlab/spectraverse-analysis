@@ -1,0 +1,10 @@
+name: spectraverse
+channels:
+  - conda-forge
+  - dglteam
+  - defaults
+dependencies:
+  - python=3.10.13
+  - pip
+  - pip:
+      - -r requirements.txt

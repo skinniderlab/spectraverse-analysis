@@ -1,0 +1,84 @@
+{
+    "script_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/spectraverse/",
+    "data_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/data/example/",
+    "pipeline": [
+        {"script": "step3-1_mgf2csv.py", "config_key": "step3-1_mgf2csv"},
+        {"script": "step3-2_adduct-rem.py", "config_key": "step3-2_adduct-rem"},
+        {"script": "step3-3_uniq-comb.py", "config_key": "step3-3_uniq-comb"},
+        {"script": "step3-4_uniq-cos-calc.py", "config_key": "step3-4_uniq-cos-calc"},
+        {"script": "step3-5_uniq-select.py", "config_key": "step3-5_uniq-select"},
+        {"script": "step3-6_noise-rem.py", "config_key": "step3-6_noise-rem"},
+        {"script": "step3-7_metadata.py", "config_key": "step3-7_metadata"}
+    ],
+    "steps": {
+        "step3-1_mgf2csv": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-temp.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-temp.mgf"
+            ],
+            "output": []
+        },
+        "step3-2_adduct-rem": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-temp.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-temp.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.mgf"
+            ]
+        },
+        "step3-3_uniq-comb": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.mgf"
+            ],
+            "output": [
+                "test_cosine_check/mgf",
+                "test_cosine_check/csv"
+            ]
+        },
+        "step3-4_uniq-cos-calc": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.mgf"
+            ],
+            "output": [
+                "test_cosine_check/mgf",
+                "test_cosine_check/csv"
+            ]
+        },
+        "step3-5_uniq-select": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms.mgf"
+            ],
+            "output": [
+                "test_cosine_check/mgf",
+                "test_cosine_check/csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck.mgf"
+            ]
+        },
+        "step3-6_noise-rem": {
+            "input": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck.mgf"
+            ],
+            "output": [
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck-noiserem.csv",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck-noiserem.mgf"
+            ]
+        },
+        "step3-7_metadata": {
+            "input": [
+                "temp/test_merge.mgf",
+                "temp/test-can-rem-lowres-prec-highfragmass-matchms-dotcheck-noiserem.mgf"
+            ],
+            "output": [
+                "test-processed.csv",
+                "test-processed.mgf"
+            ]
+        }
+    }
+}

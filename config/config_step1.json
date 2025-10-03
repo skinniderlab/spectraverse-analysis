@@ -1,0 +1,39 @@
+{
+    "script_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/spectraverse/",
+    "data_base_path": "/Genomics/argo/users/vg8892/git/spectraverse/data/example/",
+    "pipeline": [
+        {"script": "step1-1_mgf-clean.py", "config_key": "step1-1_mgf-clean"},
+        {"script": "step1-2_mgf2csv.py", "config_key": "step1-2_mgf2csv"},
+        {"script": "step1-3_merge-csv.py", "config_key": "step1-3_merge-csv"},
+        {"script": "step1-4_merge-mgf.py", "config_key": "step1-4_merge-mgf"},
+        {"script": "step1-5_csv2mgf.py", "config_key": "step1-5_csv2mgf"}
+    ],
+    "steps": {
+        "step1-1_mgf-clean": {
+            "input": "test/",
+            "output": "test_processed/"
+        },
+        "step1-2_mgf2csv": {
+            "input": "test_processed/",
+            "output": "test_csv/"
+        },
+        "step1-3_merge-csv": {
+            "input": "test_csv/",
+            "output": "temp/test_merge.csv"
+        },
+        "step1-4_merge-mgf": {
+            "input": "test_processed/",
+            "output": "temp/test_merge.mgf"
+        },
+        "step1-5_csv2mgf": {
+            "input": [
+                "temp/test_merge.csv",
+                "temp/test_merge.mgf"
+            ],
+            "output": [
+                "temp/test_merge_mod.csv",
+                "temp/test_merge_mod.mgf"
+            ]
+        }
+    }
+}
