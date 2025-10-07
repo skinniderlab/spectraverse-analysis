@@ -41,7 +41,7 @@ remove_multimer_adduct = ['[2M-3H2O]+', '[2M-2H2O+NH4]+',  '[2M-2H2O]+', '[2M-3H
 metadata = metadata[~metadata['ADDUCT'].isin(remove_multimer_adduct)]
 
 unknown_adduct = ['[M-e]-', '[M+Li]+', '[M-H+Li]+', '[M+Br]-', '[M+TFA-H]-', '[M+MeOH-H]-',  '[M+2K-H]+', '[M+IsoProp+H]+', '[M+2Na-H]+', 
-                  '[M+DMSO+H]+', '[M+ACN+H]+', '[M+ACN+Na]+'] 
+                  '[M+DMSO+H]+', '[M+ACN+H]+', '[M+ACN+Na]+', '[2M-2H+3Na]+'] 
 
 metadata = metadata[~metadata['ADDUCT'].isin(unknown_adduct)]
 

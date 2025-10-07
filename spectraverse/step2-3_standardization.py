@@ -42,9 +42,12 @@ metadata = metadata[metadata['PRECURSOR_MZ'] <= 1000]
 
 metadata_columns = list(metadata.columns)
 
-metadata_no_smiles = metadata[metadata['SMILES'].isna()]
-no_smiles_dir = '/Genomics/argo/users/vg8892/git/msms-triangulation/data/spectra/benchmark/no_smiles.csv'
-metadata_no_smiles.to_csv(no_smiles_dir, index=False)
+smiles_na_cleaned_file = git_dir + '/data/spectra/benchmark/no_smiles_link_new.csv'
+ref = pd.read_csv(smiles_na_cleaned_file)
+
+smiles_na_unique = ref['COMPOUND_NAME'].unique()
+for i, compound in enumerate(smiles_na_unique):
+    metadata.loc[(metadata['SMILES'].isna()) & (metadata['COMPOUND_NAME'] == compound), 'SMILES'] = ref['SMILES'][i]
 
 metadata = metadata[metadata['SMILES'].notna()]
 metadata_index = metadata.index
