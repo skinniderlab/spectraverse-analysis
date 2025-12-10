@@ -537,8 +537,8 @@ df_index = df.index
 temp_info = extract_info_index(temp_mgf, df_index)
 
 df = df.reset_index(drop=True)
-df.insert(0, 'TITLE', df.index.to_series().apply(lambda x: f"SPECTRAVERSE{x + 1:08d}"))
-df = df.drop(columns=['SOURCE', 'INDEX'])
+df.insert(0, 'TITLE', df.index.to_series().apply(lambda x: f"SPECTRAVERSE{x + 1:10d}"))
+df = df.drop(columns=['INDEX'])
 
 
 df.to_csv(output_csv_dir, index=False, encoding='ascii', errors='ignore')
@@ -551,6 +551,7 @@ with open(output_mgf_dir, 'w') as mgf_file:
         mgf_file.write("BEGIN IONS\n")
 
         mgf_file.write("TITLE={}\n".format(df['TITLE'][i]))
+        mgf_file.write("TITLE={}\n".format(df['SOURCE'][i]))
         mgf_file.write("FORMULA={}\n".format(df['FORMULA'][i]))
         mgf_file.write("SMILES={}\n".format(df['SMILES'][i]))
         mgf_file.write("INCHI={}\n".format(df['INCHI'][i]))
