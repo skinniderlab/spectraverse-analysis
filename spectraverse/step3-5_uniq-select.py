@@ -39,6 +39,7 @@ dedup = dedup.assign(unique_identifier = dedup[['INCHI14',
 dup = dedup[dedup.duplicated(subset=['unique_identifier'])]
 dup_identifiers = dup['unique_identifier'].unique()
 dup_df = dedup[dedup['unique_identifier'].isin(dup_identifiers)]
+dup_df['NUM_PEAKS'] = pd.to_numeric(dup_df['NUM_PEAKS'])
 
 # remove duplicate spectra above a minimum dot-product, keeping the one with the most peaks
 min_dot_prod = 0.99
