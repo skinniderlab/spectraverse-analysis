@@ -46,6 +46,150 @@ min_dot_prod = 0.99
 
 commecial_data = ['nist_23_hr_msms_new.mgf', 'nist_23_hr_msms2_new.mgf', 'agilent_fold_csv_matchms.mgf']
  
+library_order = [
+        'tony_AurelieRoux2012_neg_processed.mgf','tony_AurelieRoux2012_pos_processed.mgf',
+        'tony_DamienJimenez2019_neg.mgf', 'tony_DamienJimenez2019_pos.mgf',
+        'tony_GUIA_neg_172_spectra_processed.mgf','tony_GUIA_pos_449_spectra_processed.mgf',
+        'tony_MeRgeIon_processed.mgf','tony_mz_vault_process.mgf',
+        'tony_Narayanaswamy2020_MetaboKit_processed.mgf',
+        'tony_PFAS-identified_processed.mgf','tony_PFAS-library_processed.mgf',
+        'tony_PrasadPhapale2021_Curatr_neg_processed.mgf','tony_PrasadPhapale2021_Curatr_pos_processed.mgf',
+        'tony_RomanPopov2023-processed.mgf', 'tony_SMID-DB-processed.mgf',
+        'tony_StephanBeisken2014_neg_processed.mgf','tony_StephanBeisken2014_pos_processed.mgf',
+        'tony_Zheng2024_neg_processed.mgf','tony_Zheng2024_pos_processed.mgf',
+
+        'tony_FOODB_processed.mgf','tony_HMDB_processed.mgf','tony_MIME_processed.mgf', 
+
+        'tony_20231031_nihnp_library_neg_all_lib_MS2_processed.mgf',
+        'tony_20231031_nihnp_library_pos_all_lib_MS2_processed.mgf',
+        'tony_20231130_mcescaf_library_neg_all_lib_MS2_processed.mgf',
+        'tony_20231130_mcescaf_library_pos_all_lib_MS2_processed.mgf',
+        'tony_20231130_otavapep_library_neg_all_lib_MS2_processed.mgf',
+        'tony_20231130_otavapep_library_pos_all_lib_MS2_processed.mgf',
+        'tony_20240411_mcebio_library_neg_all_lib_MS2_processed.mgf',
+        'tony_20240411_mcebio_library_pos_all_lib_MS2_processed.mgf',
+
+        'tony_BioMSMS-Pos-PlaSMA-processed.mgf',
+        'tony_BioMSMS-neg-PlaSMA-processed.mgf',
+        'tony_KI-GIAR_zic-HILIC_Pos_v0.90-processed.mgf',
+        'tony_MSMS-Neg-CASMI2016-processed.mgf',
+        'tony_MSMS-Neg-FiehnHILIC-processed.mgf',
+        'tony_MSMS-Neg-GNPS-processed.mgf',
+        'tony_MSMS-Neg-MassBank-processed.mgf',
+        'tony_MSMS-Neg-MassBankEU-processed.mgf',
+        'tony_MSMS-Neg-MetaboBASE-processed.mgf',
+        'tony_MSMS-Neg-PlaSMA-processed.mgf',
+        'tony_MSMS-Neg-Respect-processed.mgf',
+        'tony_MSMS-Neg-RikenOxPLs-processed.mgf',
+        'tony_MSMS-Neg-Vaniya-Fiehn_Natural_Products_Library_20200109-processed.mgf',
+        'tony_MSMS-Pos-CASMI2016-processed.mgf',
+        'tony_MSMS-Pos-FiehnHILIC-processed.mgf',
+        'tony_MSMS-Pos-GNPS-processed.mgf',
+        'tony_MSMS-Pos-MassBank-processed.mgf',
+        'tony_MSMS-Pos-MassBankEU-processed.mgf',
+        'tony_MSMS-Pos-MetaboBASE-processed.mgf',
+        'tony_MSMS-Pos-Pathogen_Box_20200109-processed.mgf',
+        'tony_MSMS-Pos-PlaSMA-processed.mgf',
+        'tony_MSMS-Pos-Respect-processed.mgf',
+        'tony_MSMS-Pos-Vaniya-Fiehn_Natural_Products_Library_20200109-processed.mgf',
+        'tony_MSMS-Pos-bmdms-np_20200811-processed.mgf',
+        
+        'tony_RIKEN_LIPIDOMICS_processed.mgf','tony_RIKEN_PlaSMA_processed.mgf','tony_RIKEN_RESPECT_processed.mgf',
+        
+        'MassBank_NIST.mgf', 'matchms_select.mgf', 'tony_FoxRamos2019-processed.mgf', 'MoNA-export-LC-MS-MS_Spectra.mgf', 'tony_MoNA_ShuoHan2021.mgf',
+       ]
+
+dup_df['INSTRUMENT_ALL'] = (
+    dup_df['INSTRUMENT_TYPE'].fillna('') + ';' +
+    dup_df['INSTRUMENT'].fillna('') + ';' +
+    dup_df['SOURCE_INSTRUMENT'].fillna('') + ';' +
+    (dup_df['INSTRUMENT_MANUFACTURER_AND_MODEL'].fillna('') if 'INSTRUMENT_MANUFACTURER_AND_MODEL' in dup_df.columns else '')
+)
+
+columns_to_replace = ['INSTRUMENT_ALL']
+dup_df[columns_to_replace] = dup_df[columns_to_replace].replace(r'^\s*$', np.nan, regex=True)
+dup_df[columns_to_replace] = dup_df[columns_to_replace].replace(r'^;+$', np.nan, regex=True)
+
+dup_df['INSTRUMENT_MAIN'] = np.nan
+
+instrument_mapping = {
+    'qtof': 'qtof',
+    'q-tof': 'qtof',
+    'qtfo': 'qtof',
+    'orbitrap': 'orbitrap',
+    'qqq': 'qqq',
+    'qq': 'qqq',
+    'ittof': 'iontrap',
+    'it-tof': 'iontrap',
+    'ion trap': 'iontrap',
+    'ion-trap': 'iontrap',
+    'tripletof': 'qtof',
+    'triple tof': 'qtof',
+    'qft': 'orbitrap',
+    'itft': 'orbitrap',
+    'hf': 'orbitrap',
+    'q exactive': 'orbitrap',
+    'q-exactive': 'orbitrap',
+    'ttof': 'qtof',
+    'LC-ESI-CID; Velos': 'iontrap',
+    'LC-ESI-HCD Velos': 'orbitrap',
+    'Bruker timsTOF Pro': 'qtof',
+    'LC-ESI-QIT;4000Q TRAP': 'qtof',
+    'LC-ESI-TOF impact HD': 'qtof',
+    'LC-ESI-HCD Lumos': 'orbitrap',
+    'LC-ESI-CID; Lumos': 'iontrap',
+    'FTMS-ESI': 'orbitrap',
+    'Thermo Finnigan LTQ': 'iontrap',
+    # 'Hybrid FT': 'iontrap/orbitrap',
+    'MALDI-TOFTOF JMS-S3000': 'qtof',
+    'ESI-TOF;micrOTOF-Q': 'qtof',
+    'ESI-HCD': 'orbitrap',
+    'impact HD': 'qtof',
+    'MALDI-TOFTOF': 'qtof',
+    'LC-ESI-TOF;LCT Micromass': 'qtof',
+    'FAB-EBEB': 'qtof',
+    'MALDI-QIT;AXIMA QIT': 'qtof',
+    'QIT;API QSTAR': 'qtof',
+    'Waters SYNAPT': 'qtof',
+    'HCD': 'orbitrap'
+}
+
+# Apply the mapping step by step
+for pattern, main_type in instrument_mapping.items():
+    dup_df.loc[
+        (dup_df['INSTRUMENT_ALL'].str.contains(pattern, case=False, na=False)) & 
+        (dup_df['INSTRUMENT_MAIN'].isnull()), 
+        'INSTRUMENT_MAIN'
+    ] = main_type
+
+dup_df.loc[(dup_df['COLLISION_ENERGY'].str.contains('HCD', na=False)) & (dup_df['INSTRUMENT_MAIN'].isna()), 'INSTRUMENT_MAIN'] = 'orbitrap'
+
+instrument_order = [np.nan, 'orbitrap', 'qtof', 'iontrap', 'qqq']
+
+def get_instrument_order(x):
+    if pd.isna(x):
+        return instrument_order.index(np.nan)
+    # Otherwise use normal index lookup
+    return instrument_order.index(x) if x in instrument_order else len(instrument_order)
+
+dup_df['instrument_order'] = dup_df['INSTRUMENT_MAIN'].apply(get_instrument_order)
+
+dup_df['source_order'] = dup_df['SOURCE'].apply(
+    lambda x: library_order.index(x) if x in library_order else len(library_order)
+)
+
+dup_df = dup_df.sort_values(
+    by=['instrument_order', 'source_order'], 
+    ascending=[True, False]
+).drop(columns=['instrument_order', 'source_order'])
+
+dup_df['NUM_PEAKS'] = pd.to_numeric(dup_df['NUM_PEAKS'])
+
+dup_df.drop(
+    columns=[col for col in dup_df.columns if 'INSTRUMENT' in col or 'COLLISION' in col],
+    inplace=True
+)
+
 def process_identifier(identifier):
     dup_entries = dup_df[dup_df['unique_identifier'] == identifier]
     numpy_filepath = numpy_dir + '/{}.npy'.format(identifier)
