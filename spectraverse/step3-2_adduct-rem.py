@@ -52,6 +52,22 @@ metadata = metadata[~metadata['ADDUCT'].isin(additional_adduct)]
 
 metadata['ADDUCT'] = metadata['ADDUCT'].replace('[M+Hac-H]-', '[M+CH3COO]-')
 
+def get_num_radicals(smiles):
+	mol = Chem.MolFromSmiles(smiles)
+	try:
+		num_radicals = 0
+		for atom in mol.GetAtoms():
+			num_radicals += atom.GetNumRadicalElectrons()
+	except:
+		num_radicals = np.nan
+	return num_radicals
+
+metadata['NUM_RADICALS'] = metadata['SMILES'].apply(get_num_radicals) 
+
+metadata = metadata[metadata['NUM_RADICALS'] == 0]
+print('After removing radicals:')
+print(len(metadata))
+
 metadata['ppm_error'] = ''
 
 # ref: https://github.com/matchms/matchms/blob/1f904e0d469aef35dbba8b7b2d7b52886f3f75cc/matchms/data/known_adducts_table.csv#L56
