@@ -10,6 +10,8 @@ from rdkit.Chem import rdMolDescriptors
 from tqdm import tqdm
 from multiprocessing import Pool
 
+git_dir = os.path.expanduser("~/git/spectraverse-analysis")
+
 print("Step2-3: Standardize SMILES")
 
 metadata_csv_dir = sys.argv[1]
@@ -42,7 +44,7 @@ metadata = metadata[metadata['PRECURSOR_MZ'] <= 1000]
 
 metadata_columns = list(metadata.columns)
 
-smiles_na_cleaned_file = git_dir + '/data/spectra/benchmark/no_smiles_link_new.csv'
+smiles_na_cleaned_file = git_dir + '/data/example/temp/no_smiles_link_new.csv'
 ref = pd.read_csv(smiles_na_cleaned_file)
 
 smiles_na_unique = ref['COMPOUND_NAME'].unique()
