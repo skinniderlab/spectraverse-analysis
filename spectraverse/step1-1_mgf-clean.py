@@ -32,7 +32,7 @@ for i in range(len(input_file_name)):
                 block_lines.append(line)
                 block_lines.append(source_text)
                 block_lines.append("INDEX={}\n".format(index))
-                if input_file_name[i] != GNPS_FILE_NAME or input_file_name[i] != MONA_FILE_NAME or input_file_name[i] != MASSBANK_FILE_NAME:     
+                if input_file_name[i] not in {GNPS_FILE_NAME, MONA_FILE_NAME, MASSBANK_FILE_NAME}:     
                     block_lines.append("MS_LEVEL=2\n")
                 precursor_mz = 0
                 pepmass = 0
@@ -47,7 +47,7 @@ for i in range(len(input_file_name)):
                 if not any("PRECURSOR_MZ=" in block_line for block_line in block_lines) and pepmass!=0:
                     block_lines.insert(1, f"PRECURSOR_MZ={pepmass}\n")   
                 if not any("MS_LEVEL=" in block_line for block_line in block_lines):       
-                    if input_file_name[i] != GNPS_FILE_NAME or input_file_name[i] != MONA_FILE_NAME or input_file_name[i] != MASSBANK_FILE_NAME: 
+                    if input_file_name[i] not in {GNPS_FILE_NAME, MONA_FILE_NAME, MASSBANK_FILE_NAME}: 
                         block_lines.insert(1, "MS_LEVEL=2\n")
                 block_lines.append(line)
                 for block_line in block_lines:
@@ -112,13 +112,13 @@ for i in range(len(input_file_name)):
                         block_lines.append('ADDUCT=[' + adduct +']\n')    
             # In-house libraires specific preprocessing         
             elif line.startswith("METABOLITE_IDENTIFICATION"):    
-                if input_file_name[i] != GNPS_FILE_NAME or input_file_name[i] != MONA_FILE_NAME or input_file_name[i] != MASSBANK_FILE_NAME:  
+                if input_file_name[i] not in {GNPS_FILE_NAME, MONA_FILE_NAME, MASSBANK_FILE_NAME}:  
                     match = re.search(r'METABOLITE_IDENTIFICATION=(.*)', line)
                     if match and match.group(1).strip() != "":
                         line = line.replace("METABOLITE_IDENTIFICATION", "COMPOUND_NAME")
                         block_lines.append(line) 
             elif line.startswith("MODIFICATIONS"):    
-                if input_file_name[i] != GNPS_FILE_NAME or input_file_name[i] != MONA_FILE_NAME or input_file_name[i] != MASSBANK_FILE_NAME:  
+                if input_file_name[i] not in {GNPS_FILE_NAME, MONA_FILE_NAME, MASSBANK_FILE_NAME}:  
                     match = re.search(r'MODIFICATIONS=(.*)', line)
                     if match and match.group(1).strip() != "":
                         line = line.replace("MODIFICATIONS", "ADDUCT")
