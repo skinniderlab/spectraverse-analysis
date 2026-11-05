@@ -44,8 +44,6 @@ dup_df['NUM_PEAKS'] = pd.to_numeric(dup_df['NUM_PEAKS'])
 # remove duplicate spectra above a minimum dot-product, keeping the one with the most peaks
 min_dot_prod = 0.99
 
-commecial_data = ['nist_23_hr_msms_new.mgf', 'nist_23_hr_msms2_new.mgf', 'agilent_fold_csv_matchms.mgf']
- 
 library_order = [
         'tony_AurelieRoux2012_neg_processed.mgf','tony_AurelieRoux2012_pos_processed.mgf',
         'tony_DamienJimenez2019_neg.mgf', 'tony_DamienJimenez2019_pos.mgf',
@@ -164,7 +162,7 @@ for pattern, main_type in instrument_mapping.items():
 
 dup_df.loc[(dup_df['COLLISION_ENERGY'].str.contains('HCD', na=False)) & (dup_df['INSTRUMENT_MAIN'].isna()), 'INSTRUMENT_MAIN'] = 'orbitrap'
 
-instrument_order = [np.nan, 'orbitrap', 'qtof', 'iontrap', 'qqq']
+instrument_order = ['qqq', np.nan, 'iontrap', 'qtof', 'orbitrap']
 
 def get_instrument_order(x):
     if pd.isna(x):
@@ -180,8 +178,10 @@ dup_df['source_order'] = dup_df['SOURCE'].apply(
 
 dup_df = dup_df.sort_values(
     by=['instrument_order', 'source_order'], 
-    ascending=[True, False]
+    ascending=[True, False],
+    kind='stable'
 ).drop(columns=['instrument_order', 'source_order'])
+dup_df['sort_position'] = range(len(dup_df))
 
 dup_df['NUM_PEAKS'] = pd.to_numeric(dup_df['NUM_PEAKS'])
 
@@ -191,7 +191,7 @@ dup_df.drop(
 )
 
 def process_identifier(identifier):
-    dup_entries = dup_df[dup_df['unique_identifier'] == identifier]
+    dup_entries = dup_df[dup_df['unique_identifier'] == identifier].sort_index()
     numpy_filepath = numpy_dir + '/{}.npy'.format(identifier)
     dot_products = np.load(numpy_filepath)
     dot_products_select =  np.triu(dot_products, k=1)
@@ -200,11 +200,7 @@ def process_identifier(identifier):
     
     drop_indexes = []
     for pairs in index_pairs:
-        row = dup_entries.iloc[pairs]
-        if row['SOURCE'].isin(commecial_data).any():
-            drop_index = row[row['SOURCE'].isin(commecial_data)].index
-            if len(drop_index) > 1:
-                drop_index = row['NUM_PEAKS'].idxmin()
+        row = dup_entries.iloc[pairs].sort_values('sort_position')
         drop_index = row['NUM_PEAKS'].idxmin()
         drop_indexes.append(drop_index)
     drop_indexes = list(set(drop_indexes))
